@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>鼠标放到图片后变大</title>
+    <style>
+        /*通用样式*/
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* 通用样式结束 */
+
+        .box {
+            /*设置盒子宽高/背景色*/
+            width: 300px;
+            height: 300px;
+            background-color: #FAFAFA;
+
+
+            /*设置盒子屏幕居中*/
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -150px;
+            margin-left: -150px;
+        }
+
+        .box .picbox {
+            /* 设置图片盒子宽高 */
+            width: 300px;
+            height: 200px;
+        }
+
+        .box .picbox img {
+            /* 设置图片宽高 */
+            width: 300px;
+            height: 200px;
+        }
+
+        /*核心特效*/
+        .box:hover {
+            /*触碰到盒子增加一个阴影*/
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.20);
+        }
+
+        .box .picbox img:hover {
+            /*触碰到图片，将图片放大*/
+            transform: scale(1.1);
+        }
+
+        .box .picbox img:hover, .box, .picbox {
+            /*
+                触碰到图片，将图片放大后，还需要
+                将盒子中溢出部分隐藏掉
+            */
+            overflow: hidden;
+        }
+
+        .box .picbox img {
+            /* 盒子变大需要使用 渐变，效果会更好 */
+            transition: transform .4s ease 0s;
+        }
+
+        /*核心特效结束*/
+
+        .box .wordbox {
+            /*设置文字盒子*/
+            width: 280px;
+            height: 80px;
+            padding: 10px;
+            color: black;
+        }
+
+    </style>
+</head>
+<body>
+<div class="box">
+    <a href="">
+        <div class="picbox"><img src="../images/bj.png" alt=""></div>
+        <div class="wordbox">北京直飞马尔代夫6-7天往返含税机票（首都航空/售完为止）…</div>
+    </a>
+</div>
+</body>
+</html>
