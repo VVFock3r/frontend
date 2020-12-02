@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>限制textarea字符数量</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .textarea {
+            /* textarea默认有间距， 转为块级元素可以取消间距 */
+            display: block;
+            box-sizing: border-box;
+            width: 500px;
+            height: 200px;
+            border-width: 1px;
+
+            margin: 100px auto;
+            margin-bottom: 0;
+        }
+
+        .textarea-tips {
+            width: 150px;
+            height: 20px;
+            line-height: 20px;
+            font-size: 10px;
+            text-align: right;
+
+            margin: 0 auto;
+
+            /*background-color: red;*/
+            position: relative;
+            right: -160px;
+            bottom: 20px;
+        }
+
+    </style>
+    <script>
+        window.onload = function () {
+            // 限制textarea字符数量
+            function limitTextArea(element, maxNumber, countField) {
+                /*
+                    element： textarea节点
+                    maxNumber: 最大字符个数，包含空白字符
+                    countField: 统计字段，常用于提示用户还能输入多少个字符
+                 */
+
+                // 超过字符限制后，重置节点内容
+                if (element.value.length > maxNumber) {
+                    element.value = element.value.substr(0, maxNumber);
+                } else {
+                    // 更新计数器
+                    countField.innerText = maxNumber - element.value.length;
+                }
+            }
+
+
+            var textarea = document.getElementsByClassName("textarea")[0];
+            var tip = document.getElementsByClassName("textarea-tips")[0];
+            var span = tip.getElementsByTagName("span")[0];
+
+            textarea.onkeyup = function () {
+                limitTextArea(textarea, 10, span)
+            };
+            textarea.onkeydown = function () {
+                limitTextArea(text, 10, span)
+            };
+        }
+    </script>
+</head>
+<body>
+<textarea class="textarea"></textarea>
+<p class="textarea-tips">您还可以输入<span>10</span>个字符</p>
+</body>
+</html>
