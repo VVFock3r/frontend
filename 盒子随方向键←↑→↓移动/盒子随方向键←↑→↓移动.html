@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>盒子随方向键←↑→↓移动</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #box {
+            position: absolute;
+            top: 200px;
+            left: 200px;
+            width: 200px;
+            height: 200px;
+            background-color: orange;
+        }
+
+        #box h4 {
+            line-height: 30px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        #box #msg {
+            width: 200px;
+            height: 170px;
+            background-color: #63a35c;
+            text-align: center;
+            line-height: 170px;
+        }
+
+        #box #msg span {
+            font-size: 40px;
+        }
+
+    </style>
+    <script>
+        window.onload = function () {
+            var box = document.getElementById("box");
+            var msg = box.getElementsByTagName("span")[0];
+
+            // 盒子的top和left值
+            var t = 200;
+            var l = 200;
+            var char = "";
+
+            // 监听键盘事件
+            document.onkeydown = function (e) {
+                switch (e.keyCode) {
+                    case 37:
+                        l -= 3;
+                        char = "←";
+                        break;
+                    case 38:
+                        t -= 3;
+                        char = "↑";
+                        break;
+                    case 39:
+                        l += 3;
+                        char = "→";
+                        break;
+                    case 40:
+                        t += 3;
+                        char = "↓";
+                        break;
+                }
+                // 更改样式
+                box.style.left = l + "px";
+                box.style.top = t + "px";
+
+                // 更改显示文字
+                msg.innerText = char;
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+<div id="box">
+    <h4>盒子随方向键←↑→↓移动</h4>
+    <div id="msg">
+        <span></span>
+    </div>
+</div>
+</body>
+</html>
