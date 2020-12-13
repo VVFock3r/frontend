@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>箭头函数应用</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            width: 200px;
+            height: 200px;
+            margin: 50px auto;
+        }
+
+        #btn {
+            width: 60px;
+            height: 50px;
+            float: left;
+            margin-right: 30px;
+        }
+
+        #result {
+            display: block;
+            width: 60px;
+            height: 50px;
+            font-size: 50px;
+            line-height: 50px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <button id="btn">开始</button>
+    <span id="result">0</span>
+</div>
+
+<script>
+    // 获取两个元素
+    const btn = document.getElementById("btn");
+    const ret = document.getElementById("result");
+
+    // this问题：setInterval中的this为window对象，并非timer对象
+    // const timer = {
+    //     time: 0,
+    //     start: function () {
+    //         btn.addEventListener("click", function () {
+    //             setInterval(function () {
+    //                 this.time ++;
+    //                 ret.innerHTML = this.time;
+    //             }, 1000)
+    //         }, false)
+    //     }
+    // }
+
+    // 解决方法1：先保存this变量
+    // const timer = {
+    //     time: 0,
+    //     start: function () {
+    //         var self = this;
+    //         btn.addEventListener("click", function () {
+    //             setInterval(function () {
+    //                 self.time++;               // 修改这里的this为self
+    //                 ret.innerHTML = self.time;  // 修改这里的this为self
+    //             }, 1000)
+    //         }, false)
+    //     }
+    // }
+
+    // 解决方法2：使用箭头函数，箭头函数没有自己的this,会逐层向外查找，知道找到我们认为合适的那个this
+    const timer = {
+        time: 0,
+        start: function () {
+            btn.addEventListener("click", () => {       // 修改为箭头函数
+                setInterval(() => {                     // 修改为箭头函数
+                    this.time++;
+                    ret.innerHTML = this.time;
+                }, 1000)
+            }, false)
+        }
+    }
+
+    timer.start();
+</script>
+</body>
+</html>
