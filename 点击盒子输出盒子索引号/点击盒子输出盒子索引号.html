@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        section {
+            width: 480px;
+            height: 220px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            height: 30px;
+            line-height: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .btn {
+            float: left;
+            width: 150px;
+            height: 150px;
+            background-color: #abc;
+            margin-right: 10px;
+            font-size: 60px;
+            text-align: center;
+            line-height: 150px;
+        }
+    </style>
+</head>
+<body>
+
+<section>
+    <h1>点击盒子输出盒子索引号</h1>
+    <div id="box">
+        <div class="btn">3</div>
+        <div class="btn">4</div>
+        <div class="btn">5</div>
+    </div>
+</section>
+
+<script>
+    var btns = document.querySelectorAll(".btn");
+
+    /*
+        很容易写出这段代码，但是结果是不对的，所有的盒子都会输出3，而不是0,1,2
+        原因是：函数在执行的时候才会加载变量i，而这时候变量i已经是3了
+        解决办法：
+            (1) 使用闭包形式
+            (2)使用let定义块级作用域变量i
+     */
+    // for (var i = 0; i < btns.length; i++) {
+    //     btns[i].onclick = function () {
+    //         console.log(i);
+    //     }
+    // }
+
+
+    // 解决办法1：使用闭包形式修改上面代码
+    // for (var i = 0; i < btns.length; i++) {
+    //     // IIFE函数立即执行，和闭包结合
+    //     (function (i) {
+    //         btns[i].onclick = function () {
+    //             console.log(i);
+    //         }
+    //     })(i)
+    // }
+
+    // 解决办法2：使用let定义块级作用域变量i
+    // for (let i = 0; i < btns.length; i++) {
+    //     btns[i].onclick = function () {
+    //         console.log(i);
+    //     }
+    // }
+
+    /*
+        内存优化：
+        上面代码已经可以实现效果了，每个DOM元素都添加一个事件监听，这很浪费内存，使用事件委托机制来节省内存
+        步骤：（1）获取父级元素，并创建监听事件
+             （2）获取所有子元素数组
+             （3）输出e.target在数组中的索引
+     */
+    var box = document.getElementById("box");
+
+    box.onclick = function (e) {
+        var btnsArray = Array.from(box.querySelectorAll(".btn"));   // 获取所有子元素,并将NodeList转为数组
+        console.log(btnsArray.indexOf(e.target));                   // 输出子元素对应的索引号
+    }
+</script>
+</body>
+</html>
