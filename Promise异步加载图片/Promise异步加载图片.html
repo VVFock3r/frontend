@@ -1,0 +1,103 @@
+<!--<!DOCTYPE html>-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise异步加载图片</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            width: 570px;
+            height: 330px;
+            overflow: hidden;
+            margin: 50px auto;
+            /*background-color: orange;*/
+            text-align: center;
+        }
+
+        pre {
+            text-align: left;
+            position: relative;
+            top: 10px;
+            left: 80px;
+        }
+
+        img {
+            display: block;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="box">
+    <img id="img" src="../images/rural_scenery_01.png" alt="第一页图片">
+    <button id="btn">第二页</button>
+</div>
+
+<div class="box">
+    <h1>演示说明</h1>
+    <pre>
+        (1) F12(或Ctrl+Shift+i)打开Chrome DevTools
+        (2) 先按下Ctrl+F5强制刷新页面，观察图片已经异步加载
+        (3) 点击按钮【第二页】，直接显示图片，而无需请求网络
+    </pre>
+</div>
+
+<script>
+    /*
+        功能：异步加载图片
+        逻辑：
+            loadImgAsync(图片URL)函数调用
+                创建Image对象
+                Image对象加载图片
+                加载成功执行resolve(Image对象)
+                加载失败执行reject
+     */
+
+    // 异步加载函数，返回一个Promise对象
+    const loadImgAsync = url => {
+        return new Promise((resolve, reject) => {
+            // 创建一个Image对象
+            const imgObj = new Image();
+
+            // Image加载成功事件
+            imgObj.onload = () => {
+                resolve(imgObj);
+            };
+
+            // Image加载失败事件
+            imgObj.onerror = () => {
+                reject(`Could not load image at ${url}`);
+            };
+
+            // 这里开始加载图片(发送网络请求，下载图片)
+            imgObj.src = url;
+        })
+    };
+
+
+    window.onload = function () {
+        // 异步加载图片，这里图片已经通过网络请求下载到本地了，接下来只需要修改Dom即可
+        const img = loadImgAsync("https://img.ivsky.com/img/tupian/pre/202005/23/mushi-001.jpg");
+
+        // 获取按钮元素
+        const btn = document.getElementById("btn");
+
+        // 按钮点击事件
+        btn.onclick = function () {
+            // 修改Dom节点
+            var imgDom = document.getElementById("img");
+            img.then(imgObj => {
+                imgDom.src = imgObj.src;
+            });
+        }
+    };
+</script>
+</body>
+</html>
+
