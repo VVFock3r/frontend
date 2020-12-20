@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用LocalStorage自动填充用户名</title>
+    <style>
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="form">
+    <form id="login" action="" method="post">
+        <p>
+            用户: <input type="text" name="username" autocomplete="off">
+        </p>
+        <p>
+            密码: <input type="password" name="password">
+        </p>
+        <p>
+            <input id="btn" type="submit" value="提交">
+        </p>
+    </form>
+</div>
+
+<script>
+    // 获取两个Dom节点
+    const loginFrom = document.getElementById("login");
+    const btn = document.getElementById("btn");
+
+    // 如果已经提交多。那么这里自动填充
+    const username = localStorage.getItem("username");
+    if (username) {
+        loginFrom.username.value = username;
+    }
+
+    /*
+        给按钮添加事件
+            (1)阻止默认提交
+            (2)数据验证，这里略过
+            (3)存储一些需要自动填充的信息到localstorage中
+            (4)手动提交
+     */
+    btn.addEventListener("click", e => {
+        e.preventDefault();
+        // 数据验证
+        // 略
+
+        // 保存用户名
+        localStorage.setItem("username", loginFrom.username.value);
+
+        // 手动提交
+        loginFrom.submit();
+
+    }, false);
+
+</script>
+</body>
+</html>
