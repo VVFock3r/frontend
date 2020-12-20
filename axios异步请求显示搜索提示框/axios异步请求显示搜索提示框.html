@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>axios异步请求显示搜索提示框</title>
+    <script src="../js/axios-0.21.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #box {
+            width: 200px;
+            height: 200px;
+            margin: 100px auto;
+        }
+
+        input {
+            width: 200px;
+            height: 25px;
+            padding-left: 10px;
+            border: 1px solid #abc;
+            outline: none;
+        }
+
+        #remind {
+            width: 210px;
+            border: 1px solid #abc;
+            border-top: none;
+            display: none;
+        }
+
+        #remind li {
+            list-style: none;
+            padding-left: 10px;
+            padding-top: 8px;
+            height: 20px;
+        }
+
+        .description {
+            width: 500px;
+            height: 470px;
+            border: 1px solid #666666;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .description h3 {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .description .center {
+            width: 400px;
+            height: 300px;
+
+            position: absolute;
+            top: 50%;
+            margin-top: -150px;
+            left: 50%;
+            margin-left: -200px;
+
+            /*background-color: orange;*/
+        }
+
+    </style>
+</head>
+<body>
+<div class="description">
+    <h3>axios异步请求显示搜索提示框</h3>
+    <div class="center">
+        <h4>说明</h4>
+        <p>搜索框使用input标签</p>
+        <p>提示框使用div+ul+li</p>
+        <p>使用定时器延迟提交，减少网络开销</p>
+        <p style="color: red">注意：需要使用服务器模式打开网页</p>
+        <p style="color: red">比如Webstorm Project模式打开frontend目录</p>
+        <br/>
+        <h4>搜索步骤</h4>
+        <p>1.当搜索栏有输入时，使用axios发送异步请求</p>
+        <p>2.接收数据，准备填充到网页中</p>
+        <p>3.将数据中包含搜索数据的字体颜色改为红色</p>
+        <p>4.展示提示框</p>
+        <br/>
+        <h4>搜索提交步骤</h4>
+        <p>当搜索提示框有点击事件时</p>
+        <p>(1)修改搜索框内容</p>
+        <p>(2)隐藏提示框</p>
+    </div>
+</div>
+
+<div id="box">
+    <input id="search" type="text" autocomplete="off" autofocus="autofocus">
+    <div id="remind-box">
+        <ul id="remind">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    // 获取元素
+    const search = document.getElementById("search");
+    const remind = document.getElementById("remind");
+    const list = Array.from(document.getElementsByTagName("li"));
+
+    // ul添加点击事件
+    remind.addEventListener("click", e => {
+        search.value = e.target.innerText;
+        remind.style.display = "none";
+        search.focus();
+    }, false)
+
+
+    /*
+     设置定时器，目的是在一段时间内输入后的数据才会发送给服务端
+     避免每输入一个字符就要发送一次异步请求，增加网络开销
+    */
+    let timer = null;
+
+    // 输入监听事件
+    search.addEventListener(
+        "input", (e) => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+            timer = setTimeout(InputEvent, 150);
+        },
+        false
+    );
+
+    // Input事件
+    function InputEvent() {
+        // 搜索框为空的话直接返回
+        if (search.value.trim() === "") {
+            return;
+        }
+
+        // 发送异步请求，获取关键字提示信息
+        axios.get("./search.json", {
+            params: {
+                keyword: search.value.trim()
+            }
+        })
+            .then(res => {
+                // 清空节点所有数据
+                for (const li of list) {
+                    li.innerText = "";
+                    remind.style.display = "none";
+                }
+
+                // 修改节点数据
+                const arr = filter(res.data, search.value);
+                for (let i = 0; i < arr.length; i++) {
+                    // 增加颜色
+                    const re = new RegExp(search.value, "gi")
+                    let tmp = arr[i].replaceAll(re, function (w) {
+                        return "<span style='color: red'>" + w + "</span>";
+                    })
+                    // 修改节点内容
+                    list[i].innerHTML = tmp;
+                    remind.style.display = "block";
+                }
+            })
+            .catch(err => {
+                console.log("Search接口获取数据失败");
+            })
+    }
+
+    /*
+        过滤服务端返回的数据
+        在实际开发当中是不需要的，因为服务端返回的数据已经是过滤好的
+        因为我们是用文件的所有内容模拟返回数据，所以自己处理一下过滤
+     */
+    function filter(array, keyword) {
+        let result = [];
+        for (const item of array) {
+            if (item.toUpperCase().includes(keyword.toUpperCase())) {
+                result.push(item)
+            }
+        }
+        return result
+    }
+</script>
+</body>
+</html>
