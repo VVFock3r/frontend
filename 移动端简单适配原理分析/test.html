@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalabel=no">
+    <title>移动端简单适配原理</title>
+    <style>
+        /*
+            说明
+                我们的基准是 在宽为750px的屏幕上显示header的高度为100px,
+                我们的目标是 在宽为375px的屏幕上显示header的高度为50px，
+                也就是在基准的基础上按屏幕尺寸等比例缩放，在其他宽度的时候也是等比例缩放
+
+            分析
+                首先，高度肯定不能使用px作为单位，我们可以使用em和rem，对比em和rem的区别，使用rem比较好
+                em : 1 em = 自身元素的font-size高度
+                rem: 1 rem = html font-size的高度
+
+                假设750px设的时候我们让它的height为100px,那么height置多少rem呢？
+                100 / 750 = 0.13333333333333 rem
+                那么在375px的时候，height为50px，height设置多少rem呢？
+                50 / 375 = 0.13333333333333 rem
+
+                我们可以看到，这个比例永远是固定的，不管是多少尺寸的屏幕，比例具体是多少根据你的基准来计算
+
+                但是这个小数不是很喜欢，可不可以转为容易计算的数字呢？
+
+                仔细分析，上面是使用1rem = 750px来计算的,所以我们先假设height为2.5em，那么就有：
+                    750px屏幕下html font-size：100 / 2.5 = 40
+                    375px屏幕下html font-size：50  / 2.5 = 20
+                    再用750/40或者375/20 得到18.75
+
+                所以总结一下：
+                    屏幕宽度(viewWidth) / 系数(18.75) = html font-size
+                    height = html font-size * 2.5
+
+                在代码中，2.5rem高度是不变的，最终的header height也是不变的，所以我们通过JS不断调整html font-size值即可，
+                html font-size这个值同时也是一个动态值，根据屏幕变化有所不同
+        */
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 40px;
+        }
+
+        .header-container {
+            height: 2.5rem;
+            width: 100%;
+            background-color: gray;
+            font-size: 18px;
+        }
+    </style>
+
+    <script>
+        // 重置rem单位所对应的font-size
+        setRemUnit();
+
+        // 监听窗口大小改变事件
+        window.addEventListener("resize", setRemUnit, false);
+
+        // 重置rem单位所对应的font-size
+        function setRemUnit() {
+            var ratio = 18.75;
+            let viewWidth = document.documentElement.getBoundingClientRect().width || window.innerWidth;
+            document.documentElement.style.fontSize = viewWidth / ratio + "px";
+        }
+    </script>
+</head>
+<body>
+
+<header class="header-container">Hello World</header>
+</body>
+</html>
