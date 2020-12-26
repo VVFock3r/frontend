@@ -35,8 +35,8 @@
                     屏幕宽度(viewWidth) / 系数(18.75) = html font-size
                     height = html font-size * 2.5
 
-                在代码中，2.5rem高度是不变的，最终的header height也是不变的，所以我们通过JS不断调整html font-size值即可，
-                html font-size这个值同时也是一个动态值，根据屏幕变化有所不同
+                在代码中，2.5rem高度是不变的，最终的header height根据屏幕不断变化，所以我们通过JS不断调整html font-size值即可，
+                同时html font-size这个值是一个动态值，根据屏幕变化有所不同
         */
 
         * {
@@ -44,15 +44,14 @@
             padding: 0;
         }
 
-        html {
-            font-size: 40px;
-        }
-
         .header-container {
             height: 2.5rem;
+            line-height: 2.5rem;
             width: 100%;
-            background-color: gray;
+            background-color: rgb(50, 62, 78);
             font-size: 18px;
+            text-align: center;
+            color: white;
         }
     </style>
 
