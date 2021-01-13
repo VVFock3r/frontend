@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>默认标题</title>
+</head>
+<body>
+<script>
+    // 设置浏览器标签初始状态
+    document.title = "标签激活中";
+
+    // 浏览器标签隐藏或显示时事件
+    document.addEventListener("visibilitychange", function () {
+        // 根据标签状态动态改变标题
+        document.title = (document.hidden ? "标签隐藏中" : "标签激活中");
+    })
+</script>
+</body>
+</html>
