@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>幽灵空白</title>
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 父元素 */
+        .futher {
+            border: 1px solid gray;
+        }
+
+        /* 子元素 */
+        .child {
+            display: inline-block;
+        }
+
+    </style>
+</head>
+<body>
+<div class="center">
+    <div>
+        <section>
+            <h2>幽灵空白示例-1(边框用来标出空白范围)</h2>
+            <div class="futher">
+                <span class="child"></span>
+            </div>
+        </section>
+
+        <section>
+            <h2>幽灵空白示例-2(边框用来标出空白范围)</h2>
+            <div class="futher" style="display: inline-block; border: 1px solid gray;">
+                <img class="child" src="../images/rural_scenery_01.png" alt="">
+            </div>
+        </section>
+
+        <section>
+            <h1>幽灵空白说明</h1>
+            <p>示例1中div和span都没有设置高度，浏览器却出现了一片空白</p>
+            <p>示例2中图片底部有一小段空白</p>
+            <p>以上是两种(常见)出现幽灵空白的现象，由于大部分解释的都比较抽(che)象(dan)，</p>
+            <p>两个示例的原理也不知道一样不一样，所有这里先记录一下解决办法，原理后面再深究</p>
+        </section>
+        <section>
+            <h1>幽灵空白解决办法</h1>
+            通用解决办法
+            <ul>
+                <li>父元素设置font-size: 0;，缺点：这会让父元素中的文字消失</li>
+                <li>子元素display:block;</li>
+            </ul>
+            示例1解决办法
+            <ul>
+                <li>无</li>
+            </ul>
+            示例2解决办法
+            <ul>
+                <li>[推荐]给img添加vertical-align为除baseline以外的值，比如top;</li>
+                <li>给div设置和img一样的高度；</li>
+                <li>给img设置line-height: 0;</li>
+                <li>给img设置浮动</li>
+            </ul>
+
+        </section>
+    </div>
+</div>
+
+
+</body>
+</html>
